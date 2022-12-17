@@ -1,12 +1,15 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
+import { ApiTags } from '@nestjs/swagger/dist';
 import { CurrentUser } from 'src/user/decoradors';
 import { UserDocument } from 'src/user/schema';
 import { UserService } from 'src/user/services/user.service';
-import { AuthDto } from '../dto';
+import { RegisterDto } from '../dto';
+import { LoginDto } from '../dto/login/login.dto';
 import { LocalAuthGuard } from '../guards';
 import { AuthService } from '../services/auth.service';
 
+@ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -16,12 +19,12 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@CurrentUser() currentUser: UserDocument) {
+  login(@Body() dto: LoginDto, @CurrentUser() currentUser: UserDocument) {
     return this.authService.login(currentUser);
   }
 
   @Post('register')
-  register(@Body() dto: AuthDto) {
+  register(@Body() dto: RegisterDto) {
     return this.userService.createUser(dto);
   }
 }
