@@ -1,7 +1,8 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger/dist/decorators';
-import { JwtAuthGuard } from 'src/auth/guards/jwt/jwt.guard';
+import { Controller, Get } from '@nestjs/common';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger/dist/decorators';
+import { Authorized } from 'src/auth/decorador';
 import { CurrentUser } from '../decoradors';
+import { UserResponseDto } from '../dto';
 import { UserDocument } from '../schema';
 import { UserService } from '../services/user.service';
 
@@ -10,9 +11,10 @@ import { UserService } from '../services/user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: UserResponseDto })
+  @Authorized()
   @Get()
   getCurrentUser(@CurrentUser() user: UserDocument) {
-    // return this.userService.findUserById(user._id);
+    return this.userService.findUserById(user._id);
   }
 }

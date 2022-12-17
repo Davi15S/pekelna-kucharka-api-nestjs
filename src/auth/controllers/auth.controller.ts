@@ -1,11 +1,10 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
-import { ApiTags } from '@nestjs/swagger/dist';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger/dist';
 import { CurrentUser } from 'src/user/decoradors';
 import { UserDocument } from 'src/user/schema';
 import { UserService } from 'src/user/services/user.service';
-import { RegisterDto } from '../dto';
-import { LoginDto } from '../dto/login/login.dto';
+import { LoginDto, LoginResponseDto, RegisterDto } from '../dto';
 import { LocalAuthGuard } from '../guards';
 import { AuthService } from '../services/auth.service';
 
@@ -17,6 +16,7 @@ export class AuthController {
     private readonly userService: UserService,
   ) {}
 
+  @ApiOkResponse({ type: LoginResponseDto })
   @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Body() dto: LoginDto, @CurrentUser() currentUser: UserDocument) {
