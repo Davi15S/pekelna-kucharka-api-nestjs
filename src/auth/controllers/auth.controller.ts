@@ -1,8 +1,8 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
-import { Req } from '@nestjs/common/decorators/http/route-params.decorator';
 import { User } from '@prisma/client';
-import { Request } from 'express';
+import { CurrentUser } from 'src/user/decoradors';
+import { UserType } from 'src/user/types';
 import { AuthDto } from '../dto';
 import { LocalAuthGuard } from '../guards';
 import { AuthService } from '../services/auth.service';
@@ -13,8 +13,8 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Req() req: Request) {
-    return req.user;
+  login(@CurrentUser() currentUser: UserType) {
+    return this.authService.login(currentUser);
   }
 
   @Post('register')
