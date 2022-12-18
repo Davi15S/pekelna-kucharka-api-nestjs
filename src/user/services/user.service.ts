@@ -28,12 +28,15 @@ export class UserService {
     return await this.UserModel.findOne({ email });
   }
 
-  async createUser(dto: RegisterDto) {
-    const newUser = await new this.UserModel({
-      ...dto,
-      password: await encodePassword(dto.password),
-    });
-    newUser.save();
+  async createUser(dto: Partial<RegisterDto>): Promise<UserDocument> {
+    if (dto.password) dto.password = await encodePassword(dto.password);
+
+    const newUser = new this.UserModel({ ...dto });
+    return newUser.save();
+  }
+
+  async findUserByEmail(email: string) {
+    return this.UserModel.findOne({ email });
   }
 
   async findUserById(id: string | Types.ObjectId) {

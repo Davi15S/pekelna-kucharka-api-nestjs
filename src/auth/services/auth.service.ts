@@ -21,10 +21,7 @@ export class AuthService {
 
   async login(user: UserDocument) {
     return {
-      accessToken: this.jwtService.sign(
-        { payload: user },
-        { expiresIn: '60s' },
-      ),
+      accessToken: this.jwtService.sign({ payload: user }, { expiresIn: '1h' }),
     };
   }
 }

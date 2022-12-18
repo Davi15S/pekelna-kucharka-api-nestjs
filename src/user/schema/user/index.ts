@@ -1,5 +1,5 @@
 import { Schema, Prop, MongooseModule, SchemaFactory } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export type UserDocument = Document & User;
 
@@ -11,7 +11,7 @@ export class User {
   email: string;
 
   @Prop()
-  password: string;
+  password: string | null;
 
   @Prop()
   name: string;
