@@ -1,0 +1,3 @@
+[submodule "shared"]
+	path = shared
+	url = https://github.com/Davi15S/pekelna-kucharka-shared.git
