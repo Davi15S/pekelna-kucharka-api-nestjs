@@ -1,5 +1,7 @@
 import { Controller, Post, Body, Get } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
+import { HttpStatus } from '@nestjs/common/enums';
+import { HttpException } from '@nestjs/common/exceptions';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger/dist';
 import { CurrentUser } from 'src/user/decoradors';
 import { UserDocument } from 'src/user/schema';
@@ -24,8 +26,11 @@ export class AuthController {
   }
 
   @Post('register')
-  register(@Body() dto: RegisterDto) {
-    return this.userService.createUser(dto);
+  async register(@Body() dto: RegisterDto) {
+    const user = await this.userService.createUser(dto);
+    if (!user) {
+      throw new HttpException('User already exists!', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @UseGuards(GoogleAuthGuard)

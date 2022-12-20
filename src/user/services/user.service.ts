@@ -18,6 +18,7 @@ export class UserService {
       {
         $project: {
           password: 0,
+          __v: 0,
         },
       },
       ...postPipeline,
@@ -30,9 +31,14 @@ export class UserService {
 
   async createUser(dto: Partial<RegisterDto>): Promise<UserDocument> {
     if (dto.password) dto.password = await encodePassword(dto.password);
+    const foundUser = await this.findByEmail(dto.email);
 
-    const newUser = new this.UserModel({ ...dto });
-    return newUser.save();
+    if (foundUser) {
+      return null;
+    } else {
+      const newUser = new this.UserModel({ ...dto });
+      return newUser.save();
+    }
   }
 
   async findUserByEmail(email: string) {
