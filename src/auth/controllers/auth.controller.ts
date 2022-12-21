@@ -2,7 +2,11 @@ import { Controller, Post, Body, Get } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { HttpStatus } from '@nestjs/common/enums';
 import { HttpException } from '@nestjs/common/exceptions';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger/dist';
+import {
+  ApiExcludeEndpoint,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger/dist';
 import { CurrentUser } from 'src/user/decoradors';
 import { UserDocument } from 'src/user/schema';
 import { UserService } from 'src/user/services/user.service';
@@ -38,6 +42,7 @@ export class AuthController {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   async googleAuth() {}
 
+  @ApiExcludeEndpoint()
   @UseGuards(GoogleAuthGuard)
   @Get('google/callback')
   async googleAuthCallback(@CurrentUser() user: UserDocument) {
